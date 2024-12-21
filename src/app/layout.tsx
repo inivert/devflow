@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/providers/providers";
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
+import { ClientOnly } from "@/components/ClientOnly";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Providers>
           <div className="relative flex min-h-screen flex-col bg-background">
-            <Header />
+            <ClientOnly>
+              <Header />
+            </ClientOnly>
             <main className="flex-1">{children}</main>
-            <Footer />
+            <ClientOnly>
+              <Footer />
+            </ClientOnly>
           </div>
         </Providers>
       </body>
