@@ -3,19 +3,84 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --radius: 0.75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Neon glow effects */
+.neon-glow {
+  transition: all 0.3s ease;
+}
+
+.neon-glow-primary {
+  box-shadow: 0 0 5px var(--nextui-primary),
+              0 0 20px rgba(var(--nextui-primary-rgb), 0.5);
+}
+
+.neon-glow-primary:hover {
+  box-shadow: 0 0 10px var(--nextui-primary),
+              0 0 30px rgba(var(--nextui-primary-rgb), 0.5),
+              0 0 50px rgba(var(--nextui-primary-rgb), 0.3);
+}
+
+.neon-card {
+  transition: all 0.3s ease;
+}
+
+.neon-card:hover {
+  box-shadow: 0 0 10px rgba(var(--nextui-primary-rgb), 0.3),
+              0 0 20px rgba(var(--nextui-primary-rgb), 0.2),
+              0 0 30px rgba(var(--nextui-primary-rgb), 0.1);
+}
+
+.neon-card-highlight {
+  box-shadow: 0 0 10px rgba(var(--nextui-primary-rgb), 0.4),
+              0 0 20px rgba(var(--nextui-primary-rgb), 0.3),
+              0 0 30px rgba(var(--nextui-primary-rgb), 0.2);
+}
+
+.neon-card-highlight:hover {
+  box-shadow: 0 0 15px rgba(var(--nextui-primary-rgb), 0.5),
+              0 0 30px rgba(var(--nextui-primary-rgb), 0.4),
+              0 0 45px rgba(var(--nextui-primary-rgb), 0.3);
 }
