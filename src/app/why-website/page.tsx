@@ -1,15 +1,15 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { useTheme } from "next-themes"
+import dynamic from 'next/dynamic'
 import {
-  AreaChart, Area, BarChart, Bar, LineChart, Line,
+  AreaChart, Area, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts'
 import { ClientOnly } from "@/components/ClientOnly"
 
-// Business Growth Data
+// Business Growth Data (used in charts below)
 const revenueGrowthData = [
   { month: 'Jan', withWebsite: 15000, withoutWebsite: 8000 },
   { month: 'Feb', withWebsite: 18000, withoutWebsite: 8200 },
@@ -19,6 +19,7 @@ const revenueGrowthData = [
   { month: 'Jun', withWebsite: 34000, withoutWebsite: 9000 },
 ]
 
+// Customer Acquisition Data
 const customerAcquisitionData = [
   { source: 'Website', value: 45 },
   { source: 'Word of Mouth', value: 25 },
@@ -28,8 +29,8 @@ const customerAcquisitionData = [
 
 const onlinePresenceStats = [
   { year: '2019', percentage: 45 },
-  { year: '2020', percentage: 55 },
-  { year: '2021', percentage: 65 },
+  { year: '2020', percentage: 52 },
+  { year: '2021', percentage: 68 },
   { year: '2022', percentage: 75 },
   { year: '2023', percentage: 85 },
 ]
@@ -51,7 +52,13 @@ const fadeInUp = {
   transition: { duration: 0.6 }
 }
 
-const StatCard = ({ title, value, description }) => (
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  description: string;
+}
+
+const StatCard = ({ title, value, description }: StatCardProps) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -66,10 +73,101 @@ const StatCard = ({ title, value, description }) => (
   </motion.div>
 )
 
-export default function WhyWebsite() {
-  const { theme } = useTheme()
-  const isDark = theme === 'dark'
+// Revenue Growth Chart Component
+const RevenueGrowthChart = dynamic(() => Promise.resolve(() => (
+  <ResponsiveContainer width="100%" height={400}>
+    <AreaChart data={revenueGrowthData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="month" />
+      <YAxis />
+      <Tooltip />
+      <Area type="monotone" dataKey="withWebsite" stroke="#8884d8" fill="#8884d8" />
+      <Area type="monotone" dataKey="withoutWebsite" stroke="#82ca9d" fill="#82ca9d" />
+    </AreaChart>
+  </ResponsiveContainer>
+)), { ssr: false })
 
+// Client Growth Chart Component
+const ClientGrowthChart = dynamic(() => Promise.resolve(() => (
+  <ResponsiveContainer width="100%" height={400}>
+    <AreaChart data={clientGrowthData}>
+      <defs>
+        <linearGradient id="colorPotential" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#EC4899" stopOpacity={0.2}/>
+          <stop offset="95%" stopColor="#EC4899" stopOpacity={0}/>
+        </linearGradient>
+        <linearGradient id="colorWithWebsite" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
+          <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+        </linearGradient>
+        <linearGradient id="colorWithoutWebsite" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="#9CA3AF" stopOpacity={0.2}/>
+          <stop offset="95%" stopColor="#9CA3AF" stopOpacity={0}/>
+        </linearGradient>
+      </defs>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="month" />
+      <YAxis />
+      <Tooltip />
+      <Area
+        type="monotone"
+        dataKey="potential"
+        stroke="#EC4899"
+        fill="url(#colorPotential)"
+      />
+      <Area
+        type="monotone"
+        dataKey="withWebsite"
+        stroke="#3B82F6"
+        fill="url(#colorWithWebsite)"
+      />
+      <Area
+        type="monotone"
+        dataKey="withoutWebsite"
+        stroke="#9CA3AF"
+        fill="url(#colorWithoutWebsite)"
+      />
+    </AreaChart>
+  </ResponsiveContainer>
+)), { ssr: false })
+
+// Online Presence Chart Component
+const OnlinePresenceChart = dynamic(() => Promise.resolve(() => (
+  <ResponsiveContainer width="100%" height={400}>
+    <LineChart data={onlinePresenceStats}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="year" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="percentage" stroke="#8884d8" />
+    </LineChart>
+  </ResponsiveContainer>
+)), { ssr: false })
+
+// Customer Acquisition Chart Component
+const CustomerAcquisitionChart = dynamic(() => Promise.resolve(() => (
+  <ResponsiveContainer width="100%" height={400}>
+    <PieChart>
+      <Pie
+        data={customerAcquisitionData}
+        cx="50%"
+        cy="50%"
+        innerRadius={80}
+        outerRadius={100}
+        fill="#8884d8"
+        paddingAngle={5}
+        dataKey="value"
+      >
+        {customerAcquisitionData.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={['#8884d8', '#82ca9d', '#ffc658', '#ff7300'][index % 4]} />
+        ))}
+      </Pie>
+      <Tooltip />
+    </PieChart>
+  </ResponsiveContainer>
+)), { ssr: false })
+
+export default function WhyWebsite() {
   return (
     <ClientOnly>
       <main className="flex-1 pt-24">
@@ -116,6 +214,22 @@ export default function WhyWebsite() {
               />
             </div>
           </motion.div>
+        </section>
+
+        {/* Revenue Growth Chart */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              {...fadeInUp}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl font-bold mb-4">Revenue Growth Comparison</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Average monthly revenue comparison
+              </p>
+            </motion.div>
+            <RevenueGrowthChart />
+          </div>
         </section>
 
         {/* Client Growth Chart */}
@@ -183,107 +297,7 @@ export default function WhyWebsite() {
               transition={{ duration: 0.8 }}
               className="h-[300px] md:h-[500px] w-full"
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart 
-                  data={clientGrowthData}
-                  margin={{ 
-                    top: 20, 
-                    right: 10,
-                    left: 0,
-                    bottom: 20,
-                    ...(window.innerWidth >= 768 ? { right: 30, left: 20 } : {})
-                  }}
-                >
-                  <defs>
-                    <linearGradient id="colorPotential" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#EC4899" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#EC4899" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorWithWebsite" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorWithoutWebsite" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#9CA3AF" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#9CA3AF" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid 
-                    strokeDasharray="3 3" 
-                    stroke={isDark ? '#374151' : '#E5E7EB'} 
-                    vertical={false}
-                  />
-                  <XAxis 
-                    dataKey="month" 
-                    stroke={isDark ? '#9CA3AF' : '#6B7280'}
-                    tick={{ fontSize: window.innerWidth >= 768 ? 14 : 12 }}
-                    tickLine={false}
-                    interval="preserveStartEnd"
-                  />
-                  <YAxis 
-                    stroke={isDark ? '#9CA3AF' : '#6B7280'}
-                    tick={{ fontSize: window.innerWidth >= 768 ? 14 : 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                    label={{ 
-                      value: 'New Clients per Month', 
-                      angle: -90, 
-                      position: 'insideLeft',
-                      style: { 
-                        textAnchor: 'middle', 
-                        fill: isDark ? '#9CA3AF' : '#6B7280',
-                        fontSize: window.innerWidth >= 768 ? 14 : 12
-                      },
-                      offset: window.innerWidth >= 768 ? 0 : -10
-                    }}
-                    width={window.innerWidth >= 768 ? 80 : 50}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-                      borderColor: isDark ? '#374151' : '#E5E7EB',
-                      borderRadius: '8px',
-                      padding: window.innerWidth >= 768 ? '12px' : '8px'
-                    }}
-                    itemStyle={{ fontSize: window.innerWidth >= 768 ? '14px' : '12px' }}
-                    labelStyle={{ 
-                      fontSize: window.innerWidth >= 768 ? '16px' : '14px', 
-                      fontWeight: 'bold', 
-                      marginBottom: window.innerWidth >= 768 ? '8px' : '4px'
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="potential"
-                    stroke="#EC4899"
-                    strokeWidth={window.innerWidth >= 768 ? 3 : 2}
-                    fill="url(#colorPotential)"
-                    dot={window.innerWidth >= 768 ? { fill: '#EC4899', strokeWidth: 2 } : false}
-                    activeDot={{ r: window.innerWidth >= 768 ? 8 : 6 }}
-                    name="Potential with Our Website"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="withWebsite"
-                    stroke="#3B82F6"
-                    strokeWidth={window.innerWidth >= 768 ? 3 : 2}
-                    fill="url(#colorWithWebsite)"
-                    dot={window.innerWidth >= 768 ? { fill: '#3B82F6', strokeWidth: 2 } : false}
-                    activeDot={{ r: window.innerWidth >= 768 ? 8 : 6 }}
-                    name="With Basic Website"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="withoutWebsite"
-                    stroke="#9CA3AF"
-                    strokeWidth={window.innerWidth >= 768 ? 2 : 1}
-                    fill="url(#colorWithoutWebsite)"
-                    dot={window.innerWidth >= 768 ? { fill: '#9CA3AF', strokeWidth: 2 } : false}
-                    activeDot={{ r: window.innerWidth >= 768 ? 8 : 6 }}
-                    name="Without Website"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <ClientGrowthChart />
             </motion.div>
 
             {/* Legend - Hidden on mobile, shown on desktop */}
@@ -332,25 +346,7 @@ export default function WhyWebsite() {
                 transition={{ duration: 0.8 }}
                 className="h-[400px]"
               >
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={customerAcquisitionData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={80}
-                      outerRadius={140}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {customerAcquisitionData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+                <CustomerAcquisitionChart />
               </motion.div>
 
               <motion.div
@@ -395,27 +391,7 @@ export default function WhyWebsite() {
               transition={{ duration: 0.8 }}
               className="h-[400px] w-full"
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={onlinePresenceStats}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#E5E7EB'} />
-                  <XAxis dataKey="year" stroke={isDark ? '#9CA3AF' : '#6B7280'} />
-                  <YAxis stroke={isDark ? '#9CA3AF' : '#6B7280'} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-                      borderColor: isDark ? '#374151' : '#E5E7EB'
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="percentage"
-                    stroke="#3B82F6"
-                    strokeWidth={3}
-                    dot={{ fill: '#3B82F6', strokeWidth: 2 }}
-                    activeDot={{ r: 8 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <OnlinePresenceChart />
             </motion.div>
           </div>
         </section>

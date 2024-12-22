@@ -188,7 +188,7 @@ export default function SignInPage() {
                     (theme === 'light' ? 'text-gray-600' : 'text-gray-400')
                   }
                 >
-                  Don't have an account? Sign up
+                  Don&apos;t have an account? Sign up
                 </Link>
               </div>
             </motion.div>

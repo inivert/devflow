@@ -3,11 +3,8 @@
 import Link from "next/link"
 import { Button } from "@nextui-org/react"
 import ThemeToggle from "./ThemeToggle"
-import { useTheme } from "next-themes"
 
 export function Header() {
-  const { theme } = useTheme()
-  
   return (
     <header className="fixed top-0 z-50 w-full backdrop-blur-md bg-background/60">
       <div className="container mx-auto px-4">
