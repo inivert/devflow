@@ -1,157 +1,146 @@
 'use client'
 
-import { useState } from "react"
+import { Button } from "@nextui-org/react"
+import { IconCheck } from "@tabler/icons-react"
 import { motion } from "framer-motion"
-import { Card, CardHeader, CardBody, Button, Switch } from "@nextui-org/react"
-import { useTheme } from "next-themes"
-import { PiCheckBold } from "react-icons/pi"
+import TiltCard from "@/components/ui/TiltCard"
+import TiltButton from "@/components/ui/TiltButton"
 
 const plans = [
   {
-    name: "Starter",
-    price: { monthly: 9, yearly: 90 },
-    description: "Perfect for side projects and small teams",
+    name: "Basic",
+    price: "$19",
+    description: "Perfect for small businesses just getting started",
     features: [
-      "Up to 5 team members",
+      "Custom domain",
+      "Basic website builder",
+      "1 email account",
       "5GB storage",
-      "Basic support",
-      "Core features",
-    ],
-    highlight: false,
+      "SSL certificate",
+      "24/7 support"
+    ]
   },
   {
-    name: "Pro",
-    price: { monthly: 29, yearly: 290 },
-    description: "Best for growing teams and businesses",
+    name: "Professional",
+    price: "$49",
+    description: "Great for growing businesses needing more features",
     features: [
-      "Up to 20 team members",
+      "Everything in Basic",
+      "Advanced website builder",
+      "5 email accounts",
       "20GB storage",
-      "Priority support",
-      "Advanced features",
-      "Custom integrations",
+      "SEO tools",
+      "Analytics dashboard",
+      "Priority support"
     ],
-    highlight: true,
+    popular: true
   },
   {
     name: "Enterprise",
-    price: { monthly: 99, yearly: 990 },
-    description: "For large-scale organizations",
+    price: "$99",
+    description: "For businesses requiring advanced features and support",
     features: [
-      "Unlimited team members",
-      "Unlimited storage",
-      "24/7 support",
-      "All features",
-      "Custom solutions",
-      "Dedicated account manager",
-    ],
-    highlight: false,
-  },
+      "Everything in Professional",
+      "Unlimited email accounts",
+      "100GB storage",
+      "Advanced SEO tools",
+      "Custom integrations",
+      "Dedicated support team",
+      "99.9% uptime SLA"
+    ]
+  }
 ]
 
 export default function PricingPage() {
-  const [isYearly, setIsYearly] = useState(true)
-  const { theme } = useTheme()
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-24 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-12"
-      >
-        <h1 className={`text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r ${
-          theme === 'light' 
-            ? 'from-blue-600 to-blue-800' 
-            : 'from-blue-400 to-cyan-400'
-        }`}>
-          Simple, transparent pricing
-        </h1>
-        <p className={`text-xl ${theme === 'light' ? 'text-gray-700' : 'text-gray-400'}`}>
-          Choose the plan that's right for you
-        </p>
-      </motion.div>
+    <div className="w-full pt-24 pb-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+          >
+            Simple, Transparent Pricing
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-gray-600 dark:text-gray-400"
+          >
+            Choose the perfect plan for your business needs
+          </motion.p>
+        </div>
 
-      <div className="flex items-center gap-4 mb-12">
-        <span className={theme === 'light' ? 'text-gray-700' : 'text-gray-400'}>Monthly</span>
-        <Switch
-          defaultSelected={isYearly}
-          onChange={() => setIsYearly(!isYearly)}
-          size="lg"
-          color="primary"
-        />
-        <span className={theme === 'light' ? 'text-gray-700' : 'text-gray-400'}>
-          Yearly
-          <span className="ml-2 px-2 py-1 text-xs bg-blue-500 text-white rounded-full">
-            Save 20%
-          </span>
-        </span>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] w-full"
-      >
-        {plans.map((plan) => (
-          <div key={plan.name} className="relative">
-            {plan.highlight && (
-              <div className="absolute -top-3 left-0 right-0 mx-auto w-fit bg-blue-500 text-white px-4 py-1 rounded-full text-sm z-10">
-                Most Popular
-              </div>
-            )}
-            <Card
-              className={`w-full ${
-                plan.highlight
-                  ? 'border-2 border-blue-500'
-                  : theme === 'light'
-                  ? 'bg-white'
-                  : 'bg-gray-900'
-              }`}
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
             >
-              <CardHeader className="flex flex-col gap-2 p-6">
-                <h3 className="text-2xl font-bold">{plan.name}</h3>
-                <p className={`text-sm ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
-                  {plan.description}
-                </p>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">
-                    ${isYearly ? plan.price.yearly : plan.price.monthly}
-                  </span>
-                  <span className={`ml-2 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>
-                    /{isYearly ? 'year' : 'month'}
-                  </span>
+              <TiltCard
+                className={`relative rounded-2xl p-8 bg-background ${
+                  plan.popular
+                    ? "border-2 border-blue-500 dark:border-blue-400"
+                    : "border border-gray-200 dark:border-gray-800"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <div className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                      Most Popular
+                    </div>
+                  </div>
+                )}
+
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline mb-2">
+                    <span className="text-4xl font-bold">{plan.price}</span>
+                    <span className="text-gray-500 dark:text-gray-400 ml-2">/month</span>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">{plan.description}</p>
                 </div>
-              </CardHeader>
-              <CardBody className="p-6 pt-0">
-                <ul className="space-y-4">
+
+                <ul className="space-y-4 mb-8">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3">
-                      <PiCheckBold className="w-5 h-5 text-blue-500" />
-                      <span className={theme === 'light' ? 'text-gray-700' : 'text-gray-300'}>
-                        {feature}
-                      </span>
+                    <li key={feature} className="flex items-start">
+                      <IconCheck className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      <span className="text-gray-600 dark:text-gray-400">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Button
-                  className={`w-full mt-8 ${
-                    plan.highlight
-                      ? 'bg-blue-500 text-white'
-                      : theme === 'light'
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-white text-gray-900'
-                  }`}
-                  size="lg"
-                >
-                  Get Started
-                </Button>
-              </CardBody>
-            </Card>
-          </div>
-        ))}
-      </motion.div>
+
+                <TiltButton>
+                  <Button
+                    className={`w-full ${
+                      plan.popular
+                        ? "bg-blue-500 text-white hover:bg-blue-600"
+                        : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    }`}
+                    size="lg"
+                  >
+                    Get Started
+                  </Button>
+                </TiltButton>
+              </TiltCard>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* FAQ Section */}
+        <div className="text-center">
+          <p className="text-gray-600 dark:text-gray-400">
+            Have questions? <span className="text-blue-500">Contact our sales team</span>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

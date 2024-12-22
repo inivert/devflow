@@ -5,6 +5,7 @@ import { Providers } from "@/providers/providers";
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
 import { ClientOnly } from "@/components/ClientOnly";
+import { MobileDock } from "@/components/ui/MobileDock";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,17 +21,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen flex flex-col`} suppressHydrationWarning>
         <Providers>
-          <div className="relative flex min-h-screen flex-col bg-background">
-            <ClientOnly>
-              <Header />
-            </ClientOnly>
-            <main className="flex-1">{children}</main>
-            <ClientOnly>
-              <Footer />
-            </ClientOnly>
+          <ClientOnly>
+            <Header />
+          </ClientOnly>
+          <div className="flex-1 md:pb-0 pb-24">
+            {children}
           </div>
+          <ClientOnly>
+            <MobileDock />
+          </ClientOnly>
+          <ClientOnly>
+            <Footer className="hidden md:block" />
+          </ClientOnly>
         </Providers>
       </body>
     </html>
