@@ -1,117 +1,136 @@
 'use client'
 
-import { useState } from "react"
 import { motion } from "framer-motion"
-import { Input, Button, Card } from "@nextui-org/react"
-import Link from "next/link"
+import { Card, Button, Link } from "@nextui-org/react"
 import { useTheme } from "next-themes"
-import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react"
+import TiltCard from "@/components/ui/TiltCard"
+import TiltButton from "@/components/ui/TiltButton"
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const { theme } = useTheme()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle sign up logic here
-  }
-
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <Card className="p-6 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute -top-1/2 left-0 w-[500px] h-[500px] rounded-full"
+          style={{
+            background: theme === 'light'
+              ? 'linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2))'
+              : 'linear-gradient(to right, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1))',
+            filter: 'blur(100px)',
+          }}
+          animate={{
+            y: [0, 50, 0],
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 right-0 w-[400px] h-[400px] rounded-full"
+          style={{
+            background: theme === 'light'
+              ? 'linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2))'
+              : 'linear-gradient(to right, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.1))',
+            filter: 'blur(100px)',
+          }}
+          animate={{
+            y: [0, -50, 0],
+            scale: [1, 1.1, 1],
+            rotate: [360, 180, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </div>
+
+      <TiltCard className="w-full max-w-md relative z-10">
+        <Card className={
+          "p-8 backdrop-blur-xl backdrop-saturate-150 border border-opacity-20 " +
+          (theme === 'light'
+            ? 'bg-white/60 border-white'
+            : 'bg-gray-900/60 border-gray-700')
+        }>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-center mb-8"
+          >
+            <motion.h1
+              className={
+                "text-2xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r " +
+                (theme === 'light'
+                  ? 'from-blue-600 to-purple-600'
+                  : 'from-blue-400 to-purple-400')
+              }
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
             >
-              <h1 className="text-2xl font-bold text-center mb-2">Create an Account</h1>
-              <p className="text-gray-500 dark:text-gray-400 text-center mb-6">
-                Join our community of developers
-              </p>
+              Create an Account
+            </motion.h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Join us and start your development journey
+            </p>
+          </motion.div>
 
-              <div className="space-y-4">
-                <Input
-                  type="email"
-                  label="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <Input
-                  type="password"
-                  label="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <Input
-                  type="password"
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-              </div>
+          <motion.div
+            className="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-lg mb-6"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+          >
+            <h2 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-3">
+              Subscription Required
+            </h2>
+            <p className="text-sm text-blue-600 dark:text-blue-200 mb-4">
+              To create an account, you'll need to subscribe to one of our plans. All plans include:
+            </p>
+            <ul className="list-disc list-inside text-sm text-blue-600 dark:text-blue-200 mb-4 space-y-2">
+              <li>Access to AI-powered development tools</li>
+              <li>Project generation capabilities</li>
+              <li>Technical support</li>
+              <li>Regular updates and new features</li>
+            </ul>
+          </motion.div>
 
-              <Button
-                type="submit"
-                color="primary"
-                className="w-full mt-6"
-                size="lg"
-              >
-                Sign Up
-              </Button>
+          <TiltButton className="w-full">
+            <Button
+              className={
+                "w-full shadow-lg " +
+                (theme === 'light'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                  : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white')
+              }
+              size="lg"
+              href="/pricing"
+              as="a"
+            >
+              View Plans & Subscribe
+            </Button>
+          </TiltButton>
 
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="bordered"
-                  startContent={<IconBrandGoogle className="w-5 h-5" />}
-                  className="w-full"
-                >
-                  Google
-                </Button>
-                <Button
-                  variant="bordered"
-                  startContent={<IconBrandGithub className="w-5 h-5" />}
-                  className="w-full"
-                >
-                  GitHub
-                </Button>
-              </div>
-
-              <div className="text-center mt-6">
-                <Link
-                  href="/sign-in"
-                  className={
-                    "text-sm hover:underline " +
-                    (theme === 'light' ? 'text-gray-600' : 'text-gray-400')
-                  }
-                >
-                  Already have an account? Sign in
-                </Link>
-              </div>
-            </motion.div>
-          </form>
+          <motion.p 
+            className="text-center mt-6 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            Already have an account?{" "}
+            <Link href="/sign-in" className="text-primary hover:underline">
+              Sign in
+            </Link>
+          </motion.p>
         </Card>
-      </motion.div>
+      </TiltCard>
     </div>
   )
 }
